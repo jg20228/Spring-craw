@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<title>Insert title here</title>
+</head>
+<body>
+<h1>네이버 크롤링 하기</h1>
+<hr/>
+<form id = "frm">
+	<input type="text" name="keyword" placeholder="제품명"/>
+</form>
+
+<button onclick="crawNaver()">크롤링시작</button><!-- 자바스크립트로 요청할것 -->
+
+<script>
+	function crawNaver(){
+		//Jquery랑 id값 찾기해도 되지만
+		//form 들고 오는 방법은
+		//let form_el = document.querySelector("#frm");
+		//console.log(form_el);
+		
+		//var data = "keyword="+keyword_el.value();
+		
+		let data = $("#frm").serialize(); //KEY=VALUE로 묶어줌
+		console.log(data);
+
+		
+		fetch("/craw/naver/proc",{
+			method:"post",//post는 body가 필수다.
+			//param : data,도 있음 또는 경로에 +data
+			body : data,
+			headers:{
+				"Content-Type" : "application/x-www-form-urlencoded; charset=utf-8"
+			}
+		},60000).then(function(resp){
+			return resp.text();
+		}).then(function(resp){
+			alert(resp);
+		});
+		
+	}
+</script>
+</body>
+</html>
