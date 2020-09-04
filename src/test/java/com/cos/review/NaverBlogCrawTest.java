@@ -17,7 +17,7 @@ import com.cos.review.model.Product;
 // 섬네일, 블로그주소, 제목, 날짜
 public class NaverBlogCrawTest {
 
-	@Test
+	//@Test
 	public void 날짜_파싱() {
 		String today = LocalDate.now().toString();
 		System.out.println(today);
@@ -55,7 +55,8 @@ public class NaverBlogCrawTest {
 		}
 	}
 
-	// @Test
+	//403 뜨면 한번 돌려서 사람인증
+	@Test
 	public void 제품리뷰_블로그_크롤링() {
 		int start = 1; // 10씩 증가하면 됨.
 		List<Product> products = new ArrayList<>();

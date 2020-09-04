@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -36,6 +38,10 @@ public class Product {
 	private String thumnail;
 	private String day;
 	
+	@ManyToOne //키워드 하나에 여러개의 제품이 있으니까
+	@JoinColumn(name = "keywordId")
+	private SearchKeyword keyword;
+	
 	@CreationTimestamp
 	private Timestamp createDate;
 
@@ -62,6 +68,9 @@ public class Product {
 	public void setCreateDate(Timestamp createDate) {
 		this.createDate = createDate;
 	}
-	
+
+	public void setKeyword(SearchKeyword keyword) {
+		this.keyword = keyword;
+	}
 	
 }

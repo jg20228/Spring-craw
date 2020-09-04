@@ -10,6 +10,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import com.cos.review.model.Product;
+import com.cos.review.model.SearchKeyword;
 
 public class CrawNaverBlog {
 	
