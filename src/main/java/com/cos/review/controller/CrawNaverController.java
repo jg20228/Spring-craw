@@ -34,11 +34,19 @@ public class CrawNaverController {
 		return searchKeywordRepository.findAll();
 	}
 	
-	@GetMapping({"/product","product/{keyword}"})
-	public @ResponseBody List<Product> product(@PathVariable String keyword){
+	@GetMapping("/product")
+	public @ResponseBody List<Product> product(){
 		System.out.println("product 호출됨");
-		return productRepository.findAll();
+		int keywordId= searchKeywordRepository.findAll().get(0).getId();
+		return productRepository.findByKeywordId(keywordId);
 	}
+	
+	@GetMapping("/product/{keywordId}")
+	public @ResponseBody List<Product> productKeyword(@PathVariable int keywordId){
+		System.out.println("product 호출됨");
+		return productRepository.findByKeywordId(keywordId);
+	}
+
 
 	@GetMapping("/craw/naver")
 	public String crawNaver(Model model) {
