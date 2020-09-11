@@ -2,11 +2,16 @@ package com.cos.review.controller;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +23,7 @@ import com.cos.review.model.SearchKeyword;
 import com.cos.review.repository.ProductRepository;
 import com.cos.review.repository.SearchKeywordRepository;
 import com.cos.review.util.CrawNaverBlog;
+
 
 @Controller
 public class CrawNaverController {
@@ -38,17 +44,17 @@ public class CrawNaverController {
 	public @ResponseBody List<Product> product(){
 		System.out.println("product 호출됨");
 		int keywordId= searchKeywordRepository.findAll().get(0).getId();
-		return productRepository.findByKeywordId(keywordId);
+		return productRepository.mFindProductAll(keywordId);
 	}
 	
 	@GetMapping("/product/{keywordId}")
 	public @ResponseBody List<Product> productKeyword(@PathVariable int keywordId){
 		System.out.println("product 호출됨");
-		return productRepository.findByKeywordId(keywordId);
+		return productRepository.mFindProductAll(keywordId);
 	}
 
 
-	@GetMapping("/craw/naver")
+	@GetMapping({"/","/craw/naver"})
 	public String crawNaver(Model model) {
 		model.addAttribute("keywords", searchKeywordRepository.findAll());
 		return "craw_naver";
@@ -61,8 +67,33 @@ public class CrawNaverController {
 	}
 	
 	@GetMapping("/craw/clear")
-	public String crawClear(Model model) {
-		model.addAttribute("products", productRepository.findAll());
+	public String crawClear(
+			Model model,
+			@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+
+		int keywordId = searchKeywordRepository.findAll().get(0).getId();
+		Page<Product> products = productRepository.findByKeywordId(keywordId, pageable);
+		model.addAttribute("products", products.getContent());
+		model.addAttribute("prev", products.getPageable().getPageNumber()-1);
+		model.addAttribute("next", products.getPageable().getPageNumber()+1);
+		model.addAttribute("keywordId", keywordId);
+		model.addAttribute("allKeyword", searchKeywordRepository.findAll());
+		
+		return "craw_clear";
+	}
+	
+	@GetMapping("/craw/clear/{keywordId}")
+	public String crawClearKeyword(
+			@PathVariable int keywordId,
+			Model model, 
+			@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+
+		Page<Product> products = productRepository.findByKeywordId(keywordId, pageable);
+		model.addAttribute("products", products.getContent());
+		model.addAttribute("prev", products.getPageable().getPageNumber()-1);
+		model.addAttribute("next", products.getPageable().getPageNumber()+1);
+		model.addAttribute("keywordId", keywordId);
+		model.addAttribute("allKeyword", searchKeywordRepository.findAll());
 		return "craw_clear";
 	}
 	

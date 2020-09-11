@@ -11,3 +11,11 @@
 - Web
 - Devtools
 - Lombok
+
+## 자식 데이터 삽입시 제약조건 위배 문제 해결법
+
+```java
+// 키워드 삭제시 부모 데이터 함께 삭제하려면 연관관계를 걸고 orphanRemoval를 건다.
+@OneToMany(mappedBy = "keyword", orphanRemoval = true)
+private List<Product> products;
+```
