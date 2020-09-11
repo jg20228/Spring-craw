@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.cos.review.util.Utils;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,6 +39,7 @@ public class Product {
 	private String thumnail;
 	private String day;
 	
+	@JsonIgnoreProperties({"products"})
 	@ManyToOne //키워드 하나에 여러개의 제품이 있으니까
 	@JoinColumn(name = "keywordId")
 	private SearchKeyword keyword;
