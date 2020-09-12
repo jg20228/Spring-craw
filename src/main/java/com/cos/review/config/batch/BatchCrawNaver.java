@@ -26,7 +26,7 @@ public class BatchCrawNaver {
 		System.out.println("자동 크롤링 배치 시작=============");
 		List<Product> products = null;
 		List<SearchKeyword> searchKeywords = searchKeywordRepository.findAll();
-
+		
 		CrawNaverBlog crawNaverBlog = new CrawNaverBlog();
 		for (SearchKeyword searchKeyword : searchKeywords) {
 			products = crawNaverBlog.startDayCraw(searchKeyword.getKeyword());
